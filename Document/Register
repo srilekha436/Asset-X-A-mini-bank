@@ -1,0 +1,100 @@
+async function signup(username, password, email) {
+  try {
+    const response = await fetch('/api/user/register', { // backend endpoint
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password, email }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+        console.log("Registration successful", data);
+        //Handle success, save token to local storage, navigate to login, etc.
+    } else {
+        console.error("Registration failed", data.message);
+        //Handle error, display error message to user.
+    }
+  } catch (error) {
+    console.error('Error during signup:', error);
+  }
+}
+const express = require('express');
+const fetch = require('node-fetch'); // for making API requests from Node.js
+const app = express();
+app.use(express.json());
+
+app.post('/api/user/register', async (req, res) => {
+  try {
+    const assetXResponse = await fetch('ASSET_X_USER_API_ENDPOINT/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        //add any needed authorization headers.
+      },
+      body: JSON.stringify(req.body),
+    });
+    const assetXData = await assetXResponse.json();
+    res.json(assetXData);
+  } catch (error) {
+    res.status(500).json({ message: 'Error communicating with Asset-x API' });
+  }
+});
+async function createAccount(userId) {
+    try {
+      const response = await fetch('/api/account/create', { // backend endpoint
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+          console.log("Account created successfully", data);
+          //Handle success, display account id, etc.
+      } else {
+          console.error("Account creation failed", data.message);
+          //Handle error.
+      }
+    } catch (error) {
+      console.error('Error creating account:', error);
+    }
+  }
+  async function checkBalance(accountId) {
+    try {
+      const response = await fetch(/api/account/balance/${accountId}); // backend endpoint
+      const data = await response.json();
+      if (response.ok) {
+          console.log("Balance:", data.balance);
+          //Display balance to user.
+      } else {
+          console.error("Failed to fetch balance", data.message);
+          //handle error.
+      }
+    } catch (error) {
+      console.error('Error fetching balance:', error);
+    }
+  }
+  async function withdraw(accountId, amount) {
+    try {
+      const response = await fetch('/api/account/withdraw', { // backend endpoint
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ accountId, amount }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+          console.log("Withdrawal successful", data);
+          //handle success.
+      } else {
+          console.error("withdrawal failed", data.message);
+          //handle error.
+      }
+    } catch (error) {
+      console.error('Error during withdrawal:', error);
+    }
+  }
